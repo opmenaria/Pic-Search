@@ -1,40 +1,29 @@
 // import axios from 'axios';
-import React from 'react'
+import React, { useState } from 'react'
 import Unsplash from './api/Unsplash';
 import SearchBar from './components/SearchBar';
 import ImageList from './components/ImageList';
+import { Spin } from 'antd';
 
-class App extends React.Component {
-    state = { images: [] };
+function App() {
+    const [images, setImages] = useState([])
+    const [lodin, setlodin] = useState(false)
 
-    // async onSearchSubmit(term) {
-    //     const response = await axios.get('https://api.unsplash.com/search/photos', {
-    //         params: { query: term },
-    //         headers: {
-    //             Authorization: 'Client-ID kFI_Nq-Wr1LMxojg19MdqWx9vC1n9vzgnn5dNMbKvQs'
-    //         }
-    //     }).then((Response) => {
-    //         console.log(Response.data.results)
-    //     })
-    //     // console.log(response.data.results);
-    //     this.setState({ images: response.data.results })
-    // }
-    onSearchSubmit = async (term) => {
+    const onSearchSubmit = async (term) => {
+        setlodin(true)
         const response = await Unsplash.get('/search/photos', {
             params: { query: term }
         });
-        console.log(response.data.results);
-        this.setState({ images: response.data.results });
+        setImages(response.data.results);
+        setlodin(false)
     }
 
-    render() {
-        return (
-            <div className='ui container' style={{ marginTop: '10px' }}>
-                <SearchBar onSubmit={this.onSearchSubmit} />
-                Found: {this.state.images.length} images
-                <ImageList images={this.state.images} />
-            </div>
-        )
-    }
+    return (
+        <div className='ui container' style={{ paddingTop: '10px', overflow: 'hidden', display: 'flex', flexDirection: 'column', color: "blue", fontWeight: 500, fontSize: 16 }}>
+            <SearchBar onSubmit={onSearchSubmit} />
+            Found: {images.length} images
+            {lodin ? <Spin tip="Loading" size='large' /> : <ImageList images={images} />}
+        </div>
+    )
 }
 export default App;

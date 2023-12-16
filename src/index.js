@@ -6,7 +6,7 @@ import App from "./App";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-    <div>
+    <div style={{ background: '#d3d0d0', minHeight: "100vh" }}>
         <App />
     </div>
 );

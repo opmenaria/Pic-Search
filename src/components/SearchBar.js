@@ -1,26 +1,29 @@
-import React from "react";
+import { Input } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { SearchResult } from "semantic-ui-react";
+import { SearchOutlined } from '@ant-design/icons';
+function SearchBar(props) {
+    const infRef = useRef()
+    const [term, setTerm] = useState('')
 
-class SearchBar extends React.Component {
-    // onInputChange(event) {
-    //     console.log(event.target.value.toString());
-    // }
-    state = { term: '' };
-
-    onFormSubmit = event => {
+    const onFormSubmit = (event) => {
         event.preventDefault();
-        this.props.onSubmit(this.state.term);
+        props.onSubmit(term);
+        infRef.current.focus()
     }
-    render() {
-        return (
-            <div className="ui segment">
-                <form onSubmit={this.onFormSubmit} className="ui form">
-                    <div className="field">
-                        <label htmlFor="">Image Search</label>
-                        <input type='text' value={this.state.term} onChange={e => this.setState({ term: e.target.value })} />
-                    </div>
-                </form>
-            </div>
-        )
-    }
+    useEffect(() => {
+        infRef.current.focus()
+    }, [])
+    return (
+        <div className="ui segment">
+            <form onSubmit={(e) => onFormSubmit(e)} className="ui form">
+                <div className="field">
+                    <label htmlFor="">Image Search</label>
+                    <Input bordered={false} suffix={<SearchOutlined size={14} />} ref={infRef} type='text' value={term} onChange={e => setTerm(e.target.value)} />
+                </div>
+            </form>
+        </div>
+    )
 }
+
 export default SearchBar;
